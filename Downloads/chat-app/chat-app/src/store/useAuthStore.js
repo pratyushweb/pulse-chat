@@ -62,6 +62,39 @@ export const useAuthStore = create((set, get) => ({
         }
     },
 
+    forgotPassword: async (data, toast) => {
+        try {
+            const res = await axiosInstance.post("/auth/forgot-password", data);
+            if (toast) toast.success(res.data.message);
+            return true;
+        } catch (error) {
+            if (toast) toast.error(error.response?.data?.error || "Failed to send OTP");
+            return false;
+        }
+    },
+
+    verifyOTP: async (data, toast) => {
+        try {
+            const res = await axiosInstance.post("/auth/verify-otp", data);
+            if (toast) toast.success(res.data.message);
+            return true;
+        } catch (error) {
+            if (toast) toast.error(error.response?.data?.error || "Invalid OTP");
+            return false;
+        }
+    },
+
+    resetPassword: async (data, toast) => {
+        try {
+            const res = await axiosInstance.post("/auth/reset-password", data);
+            if (toast) toast.success(res.data.message);
+            return true;
+        } catch (error) {
+            if (toast) toast.error(error.response?.data?.error || "Password reset failed");
+            return false;
+        }
+    },
+
     connectSocket: () => {
         const { authUser, socket } = get();
         // If unauthenticated or already connected, do nothing
