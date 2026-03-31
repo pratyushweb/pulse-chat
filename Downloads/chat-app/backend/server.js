@@ -14,7 +14,12 @@ const PORT = process.env.PORT || 5000;
 
 app.use(express.json()); // to parse the incoming requests with JSON payloads
 app.use(cookieParser()); // to parse the incoming cookies
-app.use(cors({ origin: "http://localhost:5173", credentials: true })); // allow frontend access
+
+// Allow cross-origin requests from the React frontend (using env var for Production on Render)
+app.use(cors({ 
+    origin: process.env.CLIENT_URL || "http://localhost:5173", 
+    credentials: true 
+}));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
