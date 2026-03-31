@@ -67,8 +67,10 @@ export const useAuthStore = create((set, get) => ({
         // If unauthenticated or already connected, do nothing
         if (!authUser || socket?.connected) return;
 
-        // Initialize connection
-        const newSocket = io("http://localhost:5000", {
+        // Dynamically connect to Production or Localhost Sockets
+        const BACKEND_URL = import.meta.env.MODE === "development" ? "http://localhost:5000" : import.meta.env.VITE_BACKEND_URL;
+
+        const newSocket = io(BACKEND_URL, {
             query: {
                 userId: authUser._id,
             },
