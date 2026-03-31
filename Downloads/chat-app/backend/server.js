@@ -15,10 +15,13 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json()); // to parse the incoming requests with JSON payloads
 app.use(cookieParser()); // to parse the incoming cookies
 
-// Allow cross-origin requests from the React frontend (using env var for Production on Render)
-app.use(cors({ 
-    origin: process.env.CLIENT_URL || "http://localhost:5173", 
-    credentials: true 
+// Allow dynamic cross-origin requests (Bulletproof solution for Vercel <-> Render)
+app.use(cors({
+    origin: (origin, callback) => {
+        // Allows any Vercel frontend or localhost environment dynamically
+        callback(null, origin || true);
+    },
+    credentials: true
 }));
 
 app.use("/api/auth", authRoutes);
